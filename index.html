@@ -13,6 +13,12 @@
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
+        function drawPaddle(x,y) {
+            ctx.fillRect(x,y,20,100);
+        }
+        drawPaddle(770,100);
+        drawPaddle(10,300);
+      
     </script>
 </body>
 
