@@ -28,6 +28,13 @@
         drawText("3", 300,50);
         drawText("6", 500,50);
 
+        function drawCircle(x, y, r) {
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2, true);
+            ctx.closePath();
+            ctx.fill();
+        }
+        drawCircle(400,250,15);
       
     </script>
 </body>
