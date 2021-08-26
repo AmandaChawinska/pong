@@ -151,17 +151,19 @@
             drawPaddle(PADDLE_P2_X, p2PaddleY);
         }
 
-        function updateState() {
-            //tutaj zmiana stanu
-
-            movePaddles();
-
+        function moveBallByStep() {
             ballX += ballDX;
             ballY += ballDY;
+        }
 
+        function moveBall() {
+            moveBallByStep();
+        }
 
-            p1Points++;
-            p2Points += 3;
+        function updateState() {
+            moveBall();
+            movePaddles();
+
 
         }
 
