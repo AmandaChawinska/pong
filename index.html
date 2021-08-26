@@ -160,11 +160,30 @@
             moveBallByStep();
         }
 
+        function moveBallToStart(){
+            ballX = BALL_START_X;
+            ballY = BALL_START_Y;
+        }
+
+        function ballIsOutsideOnLeft(){
+            return ballX + BALL_R <=0;
+        }
+
+        function ballIsOutsideOnRight(){
+            return ballX - BALL_R >= CANVAS_WIDTH;
+        }
+
+        if (ballIsOutsideOnLeft()){
+            moveBallToStart();
+            p2Points++;
+        } else if (ballIsOutsideOnRight()){
+            moveBallToStart();
+            p1Points++;
+        }
+
         function updateState() {
             moveBall();
             movePaddles();
-
-
         }
 
         function updateAndDrawState() {
