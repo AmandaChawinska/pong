@@ -160,26 +160,47 @@
             moveBallByStep();
         }
 
-        function moveBallToStart(){
+        function moveBallToStart() {
             ballX = BALL_START_X;
             ballY = BALL_START_Y;
         }
 
-        function ballIsOutsideOnLeft(){
-            return ballX + BALL_R <=0;
+        function ballIsOutsideOnLeft() {
+            return ballX + BALL_R <= 0;
         }
 
-        function ballIsOutsideOnRight(){
+        function ballIsOutsideOnRight() {
             return ballX - BALL_R >= CANVAS_WIDTH;
         }
 
-        if (ballIsOutsideOnLeft()){
+        if (ballIsOutsideOnLeft()) {
             moveBallToStart();
             p2Points++;
-        } else if (ballIsOutsideOnRight()){
+        } else if (ballIsOutsideOnRight()) {
             moveBallToStart();
             p1Points++;
         }
+
+        function bounceBallFromWall() {
+            ballDY = -ballDY;
+        }
+
+        function bounceBallFromPaddle() {
+            ballDX = -ballDX;
+        }
+
+        function shouldBounceBallFromTopWall() {
+            return ballY <= BALL_R && ballDY < 0;
+        }
+
+        function shouldBounceBallFromBottomWall() {
+            return ballY + BALL_R >= CANVAS_HEIGHT && ballDY > 0;
+        }
+        if (shouldBounceBallFromTopWall() ||
+            shouldBounceBallFromBottomWall()) {
+            bounceBallFromWall();
+        }
+
 
         function updateState() {
             moveBall();
