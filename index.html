@@ -78,6 +78,8 @@
         let p1Action = STOP_ACTION;
         let p2Action = STOP_ACTION;
 
+        const PAUSE_BUTTON = 'KeyB';
+
 
         window.addEventListener('keydown', function (event) {
             const code = event.code;
@@ -89,6 +91,9 @@
                 p2Action = UP_ACTION;
             } else if (code === P2_DOWN_BUTTON) {
                 p2Action = DOWN_ACTION;
+            }
+            if (code === PAUSE_BUTTON) {
+                paused = !paused;
             }
         });
 
@@ -135,6 +140,7 @@
         let p2PaddleY = PADDLE_START_Y;
         let p1Points = 0;
         let p2Points = 0;
+        let paused = false;
 
         function drawState() {
             clearCanvas();
@@ -160,8 +166,10 @@
         }
 
         function updateAndDrawState() {
-            updateState();
-            drawState();
+            if (!paused) {
+                updateState();
+                drawState();
+            }
         }
 
         setInterval(updateAndDrawState, STATE_CHANGE_INTERVAL);
