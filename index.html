@@ -94,25 +94,36 @@
 
         window.addEventListener('keyup', function (event) {
             let code = event.code;
-            if ((code === P1_UP_BUTTON && p1Action === UP_ACTION) || (code === P1_DOWN_BUTTON && p1Action === DOWN_ACTION)){
+            if ((code === P1_UP_BUTTON && p1Action === UP_ACTION) || (code === P1_DOWN_BUTTON && p1Action === DOWN_ACTION)) {
                 p1Action = STOP_ACTION;
             } else if ((code === P2_UP_BUTTON && p2Action === UP_ACTION) || (code === P2_DOWN_BUTTON && p2Action === DOWN_ACTION)) {
                 p2Action = STOP_ACTION;
-            } 
+            }
         });
 
+        function coerceIn(value, min, max) {
+            return Math.max(Math.min(value, max), min);
+        };
+
+        function coercePaddle(paddleY) {
+            const minPaddleY = 0;
+            const maxPaddleY = CANVAS_HEIGHT - PADDLE_HEIGHT;
+            return coerceIn(paddleY, minPaddleY, maxPaddleY);
+        };
+
         function movePaddles() {
+
             if (p1Action === UP_ACTION) {
-                p1PaddleY -= PADDLE_STEP;
+                p1PaddleY = coercePaddle(p1PaddleY - PADDLE_STEP);
             } else if (p1Action === DOWN_ACTION) {
-                p1PaddleY += PADDLE_STEP;
+                p1PaddleY = coercePaddle(p1PaddleY + PADDLE_STEP);
             }
             if (p2Action === UP_ACTION) {
-                p2PaddleY -= PADDLE_STEP;
+                p2PaddleY = coercePaddle(p2PaddleY - PADDLE_STEP);
             } else if (p2Action === DOWN_ACTION) {
-                p2PaddleY += PADDLE_STEP;
+                p2PaddleY = coercePaddle(p2PaddleY + PADDLE_STEP);
             }
-        }
+        };
 
 
         // State
@@ -142,7 +153,7 @@
             ballX += ballDX;
             ballY += ballDY;
 
-           
+
             p1Points++;
             p2Points += 3;
 
