@@ -81,29 +81,31 @@
 
         const PAUSE_BUTTON = 'KeyB';
 
+        //Input
+        let paused = false;
+
 
         window.addEventListener('keydown', function (event) {
-            const code = event.code;
+            let code = event.code;
             if (code === P1_UP_BUTTON) {
-                p1Action = UP_ACTION;
+                p1.action = UP_ACTION;
             } else if (code === P1_DOWN_BUTTON) {
-                p1Action = DOWN_ACTION;
+                p1.action = DOWN_ACTION;
             } else if (code === P2_UP_BUTTON) {
-                p2Action = UP_ACTION;
+                p2.action = UP_ACTION;
             } else if (code === P2_DOWN_BUTTON) {
-                p2Action = DOWN_ACTION;
-            }
-            if (code === PAUSE_BUTTON) {
+                p2.action = DOWN_ACTION;
+            } else if (code === PAUSE_BUTTON) {
                 paused = !paused;
             }
         });
 
         window.addEventListener('keyup', function (event) {
             let code = event.code;
-            if ((code === P1_UP_BUTTON && p1Action === UP_ACTION) || (code === P1_DOWN_BUTTON && p1Action === DOWN_ACTION)) {
+            if ((code === P1_UP_BUTTON && p1.action === UP_ACTION) || (code === P1_DOWN_BUTTON && p1.action === DOWN_ACTION)) {
                 p1Action = STOP_ACTION;
-            } else if ((code === P2_UP_BUTTON && p2Action === UP_ACTION) || (code === P2_DOWN_BUTTON && p2Action === DOWN_ACTION)) {
-                p2Action = STOP_ACTION;
+            } else if ((code === P2_UP_BUTTON && p2.action === UP_ACTION) || (code === P2_DOWN_BUTTON && p2.action === DOWN_ACTION)) {
+                p2.action = STOP_ACTION;
             }
         });
 
@@ -111,28 +113,16 @@
             return Math.max(Math.min(value, max), min);
         };
 
-        function coercePaddle(paddleY) {
-            const minPaddleY = 0;
-            const maxPaddleY = CANVAS_HEIGHT - PADDLE_HEIGHT;
-            return coerceIn(paddleY, minPaddleY, maxPaddleY);
-        };
+        // function coercePaddle(paddleY) {
+        //     const minPaddleY = 0;
+        //     const maxPaddleY = CANVAS_HEIGHT - PADDLE_HEIGHT;
+        //     return coerceIn(paddleY, minPaddleY, maxPaddleY);
+        // };
 
-        function movePaddles() {
-
-            if (p1Action === UP_ACTION) {
-                p1PaddleY = coercePaddle(p1PaddleY - PADDLE_STEP);
-            } else if (p1Action === DOWN_ACTION) {
-                p1PaddleY = coercePaddle(p1PaddleY + PADDLE_STEP);
-            }
-            if (p2Action === UP_ACTION) {
-                p2PaddleY = coercePaddle(p2PaddleY - PADDLE_STEP);
-            } else if (p2Action === DOWN_ACTION) {
-                p2PaddleY = coercePaddle(p2PaddleY + PADDLE_STEP);
-            }
-        };
 
 
         // Object
+
         // let ballX = BALL_START_X;
         // let ballY = BALL_START_Y;
         // let ballDX = BALL_START_DX;
@@ -255,22 +245,41 @@
         }
 
 
-        function Player() {
+        function Player(paddleX) {
             return {
                 points: 0,
+                action: STOP_ACTION,
                 paddle: {
-                    y: PADDLE_START_Y
+                    y: PADDLE_START_Y,
+                    setY: function (newY) {
+                        const minPaddleY = 0;
+                        const maxPaddleY = CANVAS_HEIGHT - PADDLE_HEIGHT;
+                        this.y = coerceIn(newY, minPaddleY, maxPaddleY);
+                    },
+                    stepDown: function () {
+                        this.setY(this.y + PADDLE_STEP);
+                    },
+                    stepUp: function () {
+                        this.setY(this.y - PADDLE_STEP);
+                    }
+                },
+                makeAction: function () {
+                    if (this.action === UP_ACTION) {
+                        this.paddle.stepUp();
+                    } else if (this.action === DOWN_ACTION) {
+                        this.paddle.stepDown();
+                    }
                 }
             }
         };
 
         const p1 = Player();
         const p2 = Player();
-        // let p1PaddleY = PADDLE_START_Y;
-        // let p2PaddleY = PADDLE_START_Y;
-        // let p1Points = 0;
-        // let p2Points = 0;
-        let paused = false;
+        let p1PaddleY = PADDLE_START_Y;
+        let p2PaddleY = PADDLE_START_Y;
+        let p1Points = 0;
+        let p2Points = 0;
+
 
         function drawState() {
             clearCanvas();
@@ -281,7 +290,11 @@
             drawPaddle(PADDLE_P2_X, p2PaddleY);
         }
 
+        function movePaddles() {
+            p1.makeAction();
+            p2.makeAction();
 
+        };
 
 
         function updateState() {
