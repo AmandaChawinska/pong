@@ -132,7 +132,7 @@
         };
 
 
-        // State
+        // Object
         // let ballX = BALL_START_X;
         // let ballY = BALL_START_Y;
         // let ballDX = BALL_START_DX;
@@ -231,22 +231,6 @@
         };
 
 
-        let p1PaddleY = PADDLE_START_Y;
-        let p2PaddleY = PADDLE_START_Y;
-        let p1Points = 0;
-        let p2Points = 0;
-        let paused = false;
-
-        function drawState() {
-            clearCanvas();
-            drawPoints(p1Points.toString(), BOARD_P1_X);
-            drawPoints(p2Points.toString(), BOARD_P2_X);
-            drawBall(ball.x, ball.y);
-            drawPaddle(PADDLE_P1_X, p1PaddleY);
-            drawPaddle(PADDLE_P2_X, p2PaddleY);
-        }
-
-
         function moveBall() {
             if (ball.shouldBounceFromTopWall() || ball.shouldBounceFromBottomWall()) {
                 ball.bounceFromWall();
@@ -269,6 +253,35 @@
         function isInBetween(value, min, max) {
             return value >= min && value <= max;
         }
+
+
+        function Player() {
+            return {
+                points: 0,
+                paddle: {
+                    y: PADDLE_START_Y
+                }
+            }
+        };
+
+        const p1 = Player();
+        const p2 = Player();
+        // let p1PaddleY = PADDLE_START_Y;
+        // let p2PaddleY = PADDLE_START_Y;
+        // let p1Points = 0;
+        // let p2Points = 0;
+        let paused = false;
+
+        function drawState() {
+            clearCanvas();
+            drawPoints(p1Points.toString(), BOARD_P1_X);
+            drawPoints(p2Points.toString(), BOARD_P2_X);
+            drawBall(ball.x, ball.y);
+            drawPaddle(PADDLE_P1_X, p1PaddleY);
+            drawPaddle(PADDLE_P2_X, p2PaddleY);
+        }
+
+
 
 
         function updateState() {
